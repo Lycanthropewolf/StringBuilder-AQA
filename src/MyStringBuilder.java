@@ -1,33 +1,31 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Stack;
 
 public class MyStringBuilder {
     private char[] value; // массив символов
     private int size; // текущий размер строки
-    private List<String> snapshots; // для хранения состояний
+    private final Stack<String> snapshots; // для хранения состояний
 
     // Конструктор
     public MyStringBuilder() {
         value = new char[16]; // начальный размер
         size = 0;
-        snapshots = new ArrayList<>();
+        snapshots = new Stack<>();
     }
 
     // Метод, который добавляет строку
-    public MyStringBuilder append(String str) {
+    public void append(String str) {
         if (str == null) {
-            return this; // Игнорируем null
+            return; // Игнорируем null
         }
         saveSnapshot(); // сохраняем текущее состояние
         ensureCapacity(size + str.length()); // в случае необходимости увеличиваем размер
         for (char c : str.toCharArray()) {
             value[size++] = c; // Добавляем символы к массиву
         }
-        return this;
     }
 
     // Метод для удаления часть строки
-    public MyStringBuilder delete(int start, int end) {
+    public void delete(int start, int end) {
         if (start < 0 || start >= size || end > size || start >= end) {
             throw new IndexOutOfBoundsException("Invalid start or end index");
         }
@@ -35,7 +33,6 @@ public class MyStringBuilder {
         int deleteLength = end - start;
         System.arraycopy(value, end, value, start, size - end);
         size -= deleteLength; // уменьшаем размер
-        return this;
     }
 
     // Метод для получения строки
